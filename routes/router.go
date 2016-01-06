@@ -1,9 +1,14 @@
 package routes
 
 import (
-	"github.com/gorilla/mux"
+	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/gorilla/mux"
+
+	"ProfileService/mongo"
 )
 
 func Start() {
@@ -22,16 +27,60 @@ func Start() {
 
 func index(w http.ResponseWriter, r *http.Request) {
 	log.Println("Index Request")
+	fmt.Fprintf(w, "Hello World!!!")
 }
 
 func handleProfileNoParams(w http.ResponseWriter, r *http.Request) {
-	log.Println("v1 - GET, or POST, or PUT")
+	switch r.Method {
+	case "GET":
+		getProfile(w, r)
+	case "POST":
+		createProfile(w, r)
+	case "PUT":
+		updateProfile(w, r)
+	}
 }
 
 func handleProfileWithParams(w http.ResponseWriter, r *http.Request) {
-	log.Println("v1 - GET/:1, or DELETE/:1")
+	switch r.Method {
+	case "GET":
+		showProfile(w, r)
+	case "DELETE":
+		deleteProfile(w, r)
+	}
+}
+
+func getProfile(w http.ResponseWriter, r *http.Request) {
+	log.Println("Get All Profiles")
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	//json.NewEncoder(w).Encode(Profiles)
+	json.NewEncoder(w).Encode(mongo.GetProfiles())
+}
+
+func createProfile(w http.ResponseWriter, r *http.Request) {
+	log.Println("Create Profile")
+}
+
+func updateProfile(w http.ResponseWriter, r *http.Request) {
+	log.Println("Update Profile")
+}
+
+func showProfile(w http.ResponseWriter, r *http.Request) {
+	log.Println("Show a Profile")
+}
+
+func deleteProfile(w http.ResponseWriter, r *http.Request) {
+	log.Println("Delete a Profile")
 }
 
 func v2HandleProfileNoParams(w http.ResponseWriter, r *http.Request) {
-	log.Println("v2 - GET")
+	switch r.Method {
+	case "GET":
+		v2GetProfile(w, r)
+	}
+}
+
+func v2GetProfile(w http.ResponseWriter, r *http.Request) {
+	log.Println("Get Profiles (v2)")
 }
