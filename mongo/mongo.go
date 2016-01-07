@@ -1,14 +1,14 @@
+// mongo - CRUD package for the Profile API micro-service
 package mongo
 
 import (
 	"time"
 	"log"
-	"encoding/base64"
-
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
+	"encoding/base64"
 
-	"ProfileService/crypto"
+	"ProfileService-IdiomaticGo/crypto"
 )
 
 // Profile - is the memory representation of one user profile
@@ -16,9 +16,8 @@ type Profile struct {
 	Name 			string			`json: "username"`
 	Password 		string			`json: "password"`
 	Age 			int				`json: "age"`
-	LastUpdated     time.Time		`json: "last_updated"`
+	LastUpdated     time.Time
 }
-
 
 func init() {
 	tmp, _ := crypto.Encrypt([]byte( "test1234"))
@@ -34,6 +33,7 @@ func init() {
 	p1.CreateOrUpdateProfile()
 }
 
+// GetProfiles - Returns all the profile in the Profiles Collection
 func GetProfiles() []Profile {
 	session, err := mgo.Dial("localhost:27017")
 	if err != nil {
@@ -52,6 +52,44 @@ func GetProfiles() []Profile {
 	return profiles
 }
 
+
+// ShowProfile - Returns the profile in the Profiles Collection with name equal to the id parameter (id == name)
+func ShowProfile(id string) Profile {
+	session, err := mgo.Dial("localhost:27017")
+	if err != nil {
+		log.Println("Could not connect to mongo: ", err.Error())
+		return Profile{}
+	}
+	defer session.Close()
+
+	// Optional. Switch the session to a monotonic behavior.
+	session.SetMode(mgo.Monotonic, true)
+
+	c := session.DB("ProfileService").C("Profiles")
+	profile := Profile{}
+	err = c.Find(bson.M{"name": id}).One(&profile)
+
+	return profile
+}
+
+
+// DeleteProfile - Deletes the profile in the Profiles Collection with name equal to the id parameter (id == name)
+func DeleteProfile(id string) bool {
+	session, err := mgo.Dial("localhost:27017")
+	if err != nil {
+		log.Println("Could not connect to mongo: ", err.Error())
+		return false
+	}
+	defer session.Close()
+
+	// Optional. Switch the session to a monotonic behavior.
+	session.SetMode(mgo.Monotonic, true)
+
+	c := session.DB("ProfileService").C("Profiles")
+	err = c.RemoveId(id)
+
+	return true
+}
 
 
 // CreateOrUpdateProfile - Creates or Updates (Upsert) the profile in the Profiles Collection with id parameter
@@ -74,3 +112,4 @@ func (p *Profile) CreateOrUpdateProfile() bool {
 	}
 	return true
 }
+
