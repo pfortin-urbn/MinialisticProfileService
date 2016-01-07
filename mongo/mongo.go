@@ -3,9 +3,12 @@ package mongo
 import (
 	"time"
 	"log"
+	"encoding/base64"
 
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
+
+	"ProfileService/crypto"
 )
 
 // Profile - is the memory representation of one user profile
@@ -16,16 +19,18 @@ type Profile struct {
 	LastUpdated     time.Time		`json: "last_updated"`
 }
 
-var profiles []Profile
 
 func init() {
-	p1 := Profile{Name: "john@aol.com", Password: "pass1234", Age: 23, LastUpdated: time.Now()}
+	tmp, _ := crypto.Encrypt([]byte( "test1234"))
+	p1 := Profile{Name: "john@aol.com", Password: base64.StdEncoding.EncodeToString(tmp), Age: 23, LastUpdated: time.Now()}
 	p1.CreateOrUpdateProfile()
 
-	p1 = Profile{Name: "harry@comcast.com", Password: "pass1234", Age: 44, LastUpdated: time.Now()}
+	tmp, _ = crypto.Encrypt([]byte( "testing1"))
+	p1 = Profile{Name: "harry@comcast.com", Password: base64.StdEncoding.EncodeToString(tmp), Age: 44, LastUpdated: time.Now()}
 	p1.CreateOrUpdateProfile()
 
-	p1 = Profile{Name: "sally@microsoft.com", Password: "pass1234", Age: 63, LastUpdated: time.Now()}
+	tmp, _ = crypto.Encrypt([]byte( "pass4321"))
+	p1 = Profile{Name: "sally@microsoft.com", Password: base64.StdEncoding.EncodeToString(tmp), Age: 63, LastUpdated: time.Now()}
 	p1.CreateOrUpdateProfile()
 }
 
