@@ -1,10 +1,10 @@
 package routes
 
 import (
-	"encoding/json"
-	"fmt"
 	"log"
+	"fmt"
 	"net/http"
+	"encoding/json"
 
 	"github.com/gorilla/mux"
 
@@ -50,6 +50,7 @@ func handleProfileWithParams(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+//getProfile - Get all profiles from the DB
 func getProfile(w http.ResponseWriter, r *http.Request) {
 	log.Println("Get All Profiles")
 	w.Header().Set("Content-Type", "application/json")
@@ -58,21 +59,24 @@ func getProfile(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(mongo.GetProfiles())
 }
 
+//createProfile - Create a profile in the DB
 func createProfile(w http.ResponseWriter, r *http.Request) {
-	log.Println("Create Profile")
 }
 
+//updateProfile - Update a profile in the DB
 func updateProfile(w http.ResponseWriter, r *http.Request) {
-	log.Println("Update Profile")
 }
 
+//showProfile - given the profile ID in the request this returns the profile to the caller
 func showProfile(w http.ResponseWriter, r *http.Request) {
-	log.Println("Show a Profile")
+
 }
 
+// deleteProfile - Removes a profile from the DB
 func deleteProfile(w http.ResponseWriter, r *http.Request) {
-	log.Println("Delete a Profile")
 }
+
+
 
 func v2HandleProfileNoParams(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
@@ -81,6 +85,6 @@ func v2HandleProfileNoParams(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+
 func v2GetProfile(w http.ResponseWriter, r *http.Request) {
-	log.Println("Get Profiles (v2)")
 }
