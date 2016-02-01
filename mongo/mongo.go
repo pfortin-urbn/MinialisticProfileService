@@ -8,7 +8,7 @@ import (
 	"gopkg.in/mgo.v2/bson"
 	"encoding/base64"
 
-	"ProfileService-IdiomaticGo/crypto"
+	"ProfileService/crypto"
 )
 
 // Profile - is the memory representation of one user profile
