@@ -11,8 +11,8 @@ import (
 
 	"encoding/base64"
 
-	"ProfileService-IdiomaticGo/mongo"
-	"ProfileService-IdiomaticGo/crypto"
+	"ProfileService/mongo"
+	"ProfileService/crypto"
 )
 
 
